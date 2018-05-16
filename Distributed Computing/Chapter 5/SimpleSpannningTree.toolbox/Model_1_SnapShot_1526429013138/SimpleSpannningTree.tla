@@ -29,26 +29,20 @@ InsertLeft(v) == /\ v \notin nodes
                     IN parent' = parent @@ (v :> p)
                  /\ UNCHANGED right
 
-InsertRight(v) == /\ v \notin nodes
-                  /\ \E p \in nodes : \neg \E x \in right : parent[x]=p
-                  /\ nodes' = nodes \union {v}
-                  /\ right' = right \union {v}
-                  /\ LET pR == CHOOSE pR \in nodes : \neg \E xR \in right : parent[xR] = pR
-                       IN parent' = parent @@ (v :> pR)
-                  /\ UNCHANGED left
-                 
+
 FullTree == /\ nodes = Val
-            /\ PrintVal(<<nodes, parent>>, <<left, right>>)
+            /\ PrintVal(nodes, parent)
+            /\ PrintVal(left, right)
             /\ UNCHANGED<<nodes, parent, left, right>>  
 
-Insert(v) == AddRoot(v) \/ InsertLeft(v) \/ InsertRight(v) \/ FullTree
+Insert(v) == AddRoot(v) \/ InsertLeft(v) \/ FullTree
   
-Next == \/ \E v \in Val : Insert(v)
+Next == \E v \in Val : Insert(v)
 Spec == Init /\ [][Next]_<<nodes, parent, left, right>>
 
 -----------------------------------------------------------------------------
 \*THEOREM Spec => [](TypeInvariant)
 =============================================================================
 \* Modification History
-\* Last modified Wed May 16 05:39:47 IST 2018 by ridhm
+\* Last modified Wed May 16 05:33:25 IST 2018 by ridhm
 \* Created Wed May 16 04:53:43 IST 2018 by ridhm

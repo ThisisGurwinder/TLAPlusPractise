@@ -38,7 +38,8 @@ InsertRight(v) == /\ v \notin nodes
                   /\ UNCHANGED left
                  
 FullTree == /\ nodes = Val
-            /\ PrintVal(<<nodes, parent>>, <<left, right>>)
+            /\ PrintVal(nodes, parent)
+            /\ PrintVal(left, right)
             /\ UNCHANGED<<nodes, parent, left, right>>  
 
 Insert(v) == AddRoot(v) \/ InsertLeft(v) \/ InsertRight(v) \/ FullTree
@@ -50,5 +51,5 @@ Spec == Init /\ [][Next]_<<nodes, parent, left, right>>
 \*THEOREM Spec => [](TypeInvariant)
 =============================================================================
 \* Modification History
-\* Last modified Wed May 16 05:39:47 IST 2018 by ridhm
+\* Last modified Wed May 16 05:39:11 IST 2018 by ridhm
 \* Created Wed May 16 04:53:43 IST 2018 by ridhm
